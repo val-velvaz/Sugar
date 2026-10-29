@@ -14,10 +14,13 @@
     "vscode": "^1.90.0"
   },
   "categories": [
-    "Themes"
+    "Themes",
+    "Other"
   ],
   "main": "./dist/extension.js",
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "contributes": {
     "themes": [
       {
@@ -62,6 +65,105 @@
         "id": "sugar-collage-icons",
         "label": "Sugar Collage Icons",
         "path": "./themes/sugar-collage-icon-theme.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "sugarCollage.applyTypography",
+        "title": "Aplicar configuración tipográfica recomendada",
+        "category": "Sugar Collage"
+      },
+      {
+        "command": "sugarCollage.restoreTypography",
+        "title": "Restaurar configuración tipográfica",
+        "category": "Sugar Collage"
+      },
+      {
+        "command": "sugarCollage.selectTheme",
+        "title": "Elegir variante de tema",
+        "category": "Sugar Collage"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Tipografía",
+        "properties": {
+          "sugarCollage.typography.fontSize": {
+            "type": "number",
+            "default": 14,
+            "minimum": 8,
+            "maximum": 32,
+            "markdownDescription": "Tamaño de letra del editor que aplica el comando **Aplicar configuración tipográfica recomendada**."
+          },
+          "sugarCollage.typography.lineHeight": {
+            "type": "number",
+            "default": 1.6,
+            "minimum": 0,
+            "maximum": 3,
+            "markdownDescription": "Interlineado recomendado. Entre 0 y 8 se interpreta como multiplicador del tamaño de letra (1.6 = 160 %)."
+          },
+          "sugarCollage.typography.letterSpacing": {
+            "type": "number",
+            "default": 0.3,
+            "minimum": -1,
+            "maximum": 3,
+            "markdownDescription": "Espaciado entre letras recomendado, en píxeles."
+          }
+        }
+      },
+      {
+        "title": "Tema automático",
+        "properties": {
+          "sugarCollage.autoTheme.mode": {
+            "type": "string",
+            "enum": [
+              "off",
+              "hora",
+              "sistema"
+            ],
+            "enumDescriptions": [
+              "Desactivado: el tema no cambia solo.",
+              "Cambia entre el tema claro y el oscuro según la hora del día.",
+              "Sigue el modo claro/oscuro del sistema operativo (window.autoDetectColorScheme)."
+            ],
+            "default": "off",
+            "markdownDescription": "Cambio automático de variante de tema. Se puede activar desde **Sugar Collage: Elegir variante de tema**."
+          },
+          "sugarCollage.autoTheme.lightTheme": {
+            "type": "string",
+            "enum": [
+              "Sugar Collage Light – Algodón",
+              "Sugar Collage Light – Pistache",
+              "Sugar Collage Light – Lavanda",
+              "Sugar Collage Light – Crema"
+            ],
+            "default": "Sugar Collage Light – Algodón",
+            "description": "Tema claro que se usa de día o cuando el sistema está en modo claro."
+          },
+          "sugarCollage.autoTheme.darkTheme": {
+            "type": "string",
+            "enum": [
+              "Sugar Collage Dark",
+              "Sugar Collage Maximal"
+            ],
+            "default": "Sugar Collage Dark",
+            "description": "Tema oscuro que se usa de noche o cuando el sistema está en modo oscuro."
+          },
+          "sugarCollage.autoTheme.dayStart": {
+            "type": "string",
+            "default": "07:00",
+            "pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]$",
+            "patternErrorMessage": "Usa el formato HH:MM, por ejemplo 07:30.",
+            "markdownDescription": "Hora (HH:MM) a partir de la cual se usa el tema claro en el modo **hora**."
+          },
+          "sugarCollage.autoTheme.nightStart": {
+            "type": "string",
+            "default": "19:30",
+            "pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]$",
+            "patternErrorMessage": "Usa el formato HH:MM, por ejemplo 19:30.",
+            "markdownDescription": "Hora (HH:MM) a partir de la cual se usa el tema oscuro en el modo **hora**."
+          }
+        }
       }
     ]
   },

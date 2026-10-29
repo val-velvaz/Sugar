@@ -48,3 +48,24 @@ Las carpetas son notas adhesivas con chincheta (abiertas y cerradas), con emblem
 
 - `npm run generate:icons` regenera `media/icons/` y `themes/sugar-collage-icon-theme.json`.
 - `npm run preview:icons` genera `.preview/icons.html` con todos los íconos sobre el fondo de cada tema.
+
+## Comandos
+
+| Comando (paleta: `Ctrl+Shift+P`)                                 | Qué hace                                                                                                                                                                                                                                                             |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Sugar Collage: Aplicar configuración tipográfica recomendada** | Muestra un diff de tus settings actuales frente a los recomendados (Fira Code con ligaduras `'calt', 'liga'`, tamaño, interlineado y espaciado), pide confirmación y guarda un respaldo en `globalState`. Si Fira Code no está instalada, ofrece abrir Google Fonts. |
+| **Sugar Collage: Restaurar configuración tipográfica**           | Vuelve a los valores que tenías antes de aplicar la recomendación.                                                                                                                                                                                                   |
+| **Sugar Collage: Elegir variante de tema**                       | QuickPick con los 6 temas, swatch en emoji y vista previa en vivo. Incluye "Automático por hora del día" y "Sincronizar con el sistema".                                                                                                                             |
+
+## Configuración
+
+| Opción                                  | Por defecto | Descripción                                              |
+| --------------------------------------- | ----------- | -------------------------------------------------------- |
+| `sugarCollage.typography.fontSize`      | `14`        | Tamaño de letra recomendado.                             |
+| `sugarCollage.typography.lineHeight`    | `1.6`       | Interlineado (multiplicador).                            |
+| `sugarCollage.typography.letterSpacing` | `0.3`       | Espaciado entre letras (px).                             |
+| `sugarCollage.autoTheme.mode`           | `off`       | `off`, `hora` (según la hora) o `sistema` (según el SO). |
+| `sugarCollage.autoTheme.lightTheme`     | Algodón     | Tema claro para el día o el modo claro del sistema.      |
+| `sugarCollage.autoTheme.darkTheme`      | Dark        | Tema oscuro para la noche o el modo oscuro del sistema.  |
+| `sugarCollage.autoTheme.dayStart`       | `07:00`     | Inicio del día (modo `hora`).                            |
+| `sugarCollage.autoTheme.nightStart`     | `19:30`     | Inicio de la noche (modo `hora`).                        |
