@@ -18,7 +18,14 @@ export interface VsCodeTheme {
   semanticTokenColors: Record<
     string,
     | Hex
-    | { foreground: Hex; fontStyle?: string; italic?: boolean; bold?: boolean; underline?: boolean }
+    | {
+        foreground: Hex;
+        fontStyle?: string;
+        italic?: boolean;
+        bold?: boolean;
+        underline?: boolean;
+        strikethrough?: boolean;
+      }
   >;
 }
 
@@ -320,6 +327,144 @@ export function buildColors(spec: ThemeSpec): Record<string, Hex> {
     'notebook.selectedCellBackground': soft(0.12),
     'notebookStatusSuccessIcon.foreground': u.success,
     'notebookStatusErrorIcon.foreground': u.error,
+    'notebookStatusRunningIcon.foreground': u.info,
+    'notebook.editorBackground': u.editorBg,
+    'notebook.cellHoverBackground': soft(0.06),
+    'notebook.focusedCellBackground': soft(0.08),
+    'notebook.cellToolbarSeparator': u.border,
+    'notebook.cellStatusBarItemHoverBackground': soft(0.2),
+    'notebook.outputContainerBackgroundColor': u.panelBg,
+    'notebook.outputContainerBorderColor': u.border,
+    'notebook.symbolHighlightBackground': soft(0.15),
+    'notebookScrollbarSlider.background': soft(0.25),
+    'notebookScrollbarSlider.hoverBackground': soft(0.4),
+
+    // Charts (notebooks, webviews y vistas de VS Code)
+    'charts.foreground': u.fg,
+    'charts.lines': withAlpha(u.lineNumber, 0.5),
+    'charts.red': u.error,
+    'charts.blue': spec.syntax.function,
+    'charts.yellow': spec.syntax.constant,
+    'charts.orange': spec.syntax.number,
+    'charts.green': spec.syntax.string,
+    'charts.purple': spec.syntax.keyword,
+
+    // Debug
+    'debugToolBar.background': u.widgetBg,
+    'debugToolBar.border': u.border,
+    'debugIcon.breakpointForeground': u.error,
+    'debugIcon.breakpointUnverifiedForeground': u.lineNumber,
+    'debugIcon.breakpointCurrentStackframeForeground': spec.syntax.constant,
+    'debugIcon.startForeground': u.success,
+    'debugIcon.pauseForeground': u.info,
+    'debugIcon.stopForeground': u.error,
+    'debugIcon.restartForeground': u.success,
+    'debugIcon.stepOverForeground': u.info,
+    'debugIcon.stepIntoForeground': u.info,
+    'debugIcon.stepOutForeground': u.info,
+    'debugIcon.continueForeground': u.success,
+    'editor.stackFrameHighlightBackground': withAlpha(spec.syntax.constant, 0.15),
+    'editor.focusedStackFrameHighlightBackground': withAlpha(u.gitAdded, 0.15),
+    'debugConsole.infoForeground': u.info,
+    'debugConsole.warningForeground': u.warning,
+    'debugConsole.errorForeground': u.error,
+    'debugConsole.sourceForeground': u.fgMuted,
+    'debugConsoleInputIcon.foreground': u.accent,
+    'debugTokenExpression.name': spec.syntax.property,
+    'debugTokenExpression.value': u.fg,
+    'debugTokenExpression.string': spec.syntax.string,
+    'debugTokenExpression.number': spec.syntax.number,
+    'debugTokenExpression.boolean': spec.syntax.constant,
+    'debugTokenExpression.error': u.error,
+
+    // Testing
+    'testing.iconPassed': u.success,
+    'testing.iconFailed': u.error,
+    'testing.iconErrored': u.error,
+    'testing.iconQueued': spec.syntax.constant,
+    'testing.iconUnset': u.lineNumber,
+    'testing.iconSkipped': u.lineNumber,
+    'testing.runAction': u.success,
+    'testing.peekBorder': u.error,
+    'testing.peekHeaderBackground': withAlpha(u.error, 0.1),
+
+    // Conflictos de merge
+    'merge.currentHeaderBackground': withAlpha(u.gitAdded, 0.4),
+    'merge.currentContentBackground': withAlpha(u.gitAdded, 0.15),
+    'merge.incomingHeaderBackground': withAlpha(u.gitModified, 0.4),
+    'merge.incomingContentBackground': withAlpha(u.gitModified, 0.15),
+    'merge.commonHeaderBackground': withAlpha(u.lineNumber, 0.4),
+    'merge.commonContentBackground': withAlpha(u.lineNumber, 0.15),
+    'editorOverviewRuler.currentContentForeground': u.gitAdded,
+    'editorOverviewRuler.incomingContentForeground': u.gitModified,
+    'mergeEditor.change.background': withAlpha(u.gitModified, 0.15),
+    'mergeEditor.change.word.background': withAlpha(u.gitModified, 0.3),
+
+    // Problemas, bombilla y marcadores
+    'problemsErrorIcon.foreground': u.error,
+    'problemsWarningIcon.foreground': u.warning,
+    'problemsInfoIcon.foreground': u.info,
+    'editorLightBulb.foreground': spec.syntax.constant,
+    'editorLightBulbAutoFix.foreground': u.info,
+    'editorMarkerNavigation.background': u.widgetBg,
+    'editorMarkerNavigationError.background': u.error,
+    'editorMarkerNavigationWarning.background': u.warning,
+    'editorMarkerNavigationInfo.background': u.info,
+    'editorUnicodeHighlight.border': u.warning,
+    'editorUnnecessaryCode.opacity': '#000000A0',
+
+    // Íconos de símbolos (outline, sugerencias, breadcrumbs)
+    'symbolIcon.classForeground': spec.syntax.type,
+    'symbolIcon.structForeground': spec.syntax.type,
+    'symbolIcon.interfaceForeground': spec.syntax.type,
+    'symbolIcon.enumeratorForeground': spec.syntax.type,
+    'symbolIcon.enumeratorMemberForeground': spec.syntax.constant,
+    'symbolIcon.constantForeground': spec.syntax.constant,
+    'symbolIcon.functionForeground': spec.syntax.function,
+    'symbolIcon.methodForeground': spec.syntax.function,
+    'symbolIcon.constructorForeground': spec.syntax.function,
+    'symbolIcon.variableForeground': spec.syntax.property,
+    'symbolIcon.fieldForeground': spec.syntax.property,
+    'symbolIcon.propertyForeground': spec.syntax.property,
+    'symbolIcon.keywordForeground': spec.syntax.keyword,
+    'symbolIcon.moduleForeground': spec.syntax.type,
+    'symbolIcon.namespaceForeground': spec.syntax.type,
+    'symbolIcon.stringForeground': spec.syntax.string,
+    'symbolIcon.numberForeground': spec.syntax.number,
+    'symbolIcon.booleanForeground': spec.syntax.constant,
+    'symbolIcon.operatorForeground': spec.syntax.operator,
+    'symbolIcon.typeParameterForeground': spec.syntax.type,
+    'symbolIcon.snippetForeground': spec.syntax.regex,
+    'symbolIcon.colorForeground': spec.syntax.regex,
+    'symbolIcon.fileForeground': u.fgMuted,
+    'symbolIcon.folderForeground': u.fgMuted,
+
+    // Settings, atajos, banners, extensiones y bienvenida
+    'settings.headerForeground': u.fg,
+    'settings.modifiedItemIndicator': u.accent,
+    'settings.focusedRowBackground': soft(0.08),
+    'settings.rowHoverBackground': soft(0.05),
+    'keybindingLabel.background': soft(0.15),
+    'keybindingLabel.foreground': u.fg,
+    'keybindingLabel.border': u.border,
+    'keybindingLabel.bottomBorder': u.border,
+    'banner.background': u.accentSoft,
+    'banner.foreground': dark ? '#2E2D2D' : u.fg,
+    'extensionButton.prominentBackground': u.accent,
+    'extensionButton.prominentForeground': u.accentFg,
+    'extensionBadge.remoteBackground': u.accent,
+    'extensionBadge.remoteForeground': u.accentFg,
+    'welcomePage.tileBackground': u.sidebarBg,
+    'welcomePage.tileHoverBackground': hover,
+    'welcomePage.progress.foreground': u.accent,
+    'walkThrough.embeddedEditorBackground': u.panelBg,
+    'searchEditor.findMatchBackground': u.findMatchOther,
+    'commandCenter.background': u.inputBg,
+    'commandCenter.foreground': u.fg,
+    'commandCenter.border': u.border,
+    'commandCenter.activeBackground': hover,
+    'toolbar.hoverBackground': hover,
+    'sash.hoverBorder': u.accent,
   };
   return colors;
 }
@@ -372,7 +517,9 @@ export const scopeRules: readonly ScopeRule[] = [
       'keyword.operator.expression',
       'keyword.operator.logical.python',
       'keyword.operator.sizeof',
-      'keyword.operator.star.sql',
+      'keyword.operator.alignof',
+      'keyword.operator.cast',
+      'keyword.operator.wordlike',
     ],
   },
   {
@@ -457,7 +604,7 @@ export const scopeRules: readonly ScopeRule[] = [
       'meta.preprocessor',
       'keyword.control.directive',
       'punctuation.definition.directive',
-      'entity.name.function.preprocessor',
+
       'meta.preprocessor.macro',
     ],
   },
@@ -469,7 +616,7 @@ export const scopeRules: readonly ScopeRule[] = [
   {
     name: 'Tags HTML/XML',
     role: 'tag',
-    scope: ['entity.name.tag', 'punctuation.definition.tag', 'support.class.component'],
+    scope: ['entity.name.tag', 'punctuation.definition.tag'],
   },
   {
     name: 'Atributos',
@@ -642,7 +789,210 @@ export const scopeRules: readonly ScopeRule[] = [
   { name: 'Log strings', role: 'string', scope: ['log.string'] },
   { name: 'Log constantes', role: 'keyword', scope: ['log.constant', 'log.exception'] },
 
+  // Log nativo de VS Code (Output) y LogFileHighlighter
+  {
+    name: 'Log nativo error',
+    role: 'tag',
+    fontStyle: 'bold',
+    scope: ['token.error-token', 'log.exceptiontype'],
+  },
+  { name: 'Log nativo warning', role: 'constant', scope: ['token.warn-token'] },
+  { name: 'Log nativo info', role: 'function', scope: ['token.info-token'] },
+  { name: 'Log nativo debug', role: 'comment', scope: ['token.debug-token'] },
+  { name: 'Log URLs', role: 'link', fontStyle: 'underline', scope: ['log.url', 'log.path'] },
+
+  // C / C++ (cpptools y clangd vía TextMate)
+  {
+    name: 'C/C++ tipos base',
+    role: 'type',
+    scope: [
+      'storage.type.built-in.primitive',
+      'storage.type.primitive.c',
+      'support.type.posix-reserved',
+      'support.type.sys-types',
+      'entity.name.scope-resolution',
+      'entity.name.type.template',
+    ],
+  },
+  {
+    name: 'C/C++ punteros y referencias',
+    role: 'operator',
+    scope: [
+      'storage.modifier.pointer',
+      'storage.modifier.reference',
+      'punctuation.separator.pointer-access',
+      'punctuation.separator.dot-access',
+      'punctuation.separator.scope-resolution',
+    ],
+  },
+  {
+    name: 'C/C++ includes',
+    role: 'macro',
+    scope: [
+      'keyword.control.directive.include',
+      'keyword.control.directive.define',
+      'keyword.control.directive.conditional',
+      'keyword.control.directive.pragma',
+    ],
+  },
+  {
+    name: 'C/C++ nombre de macro',
+    role: 'constant',
+    scope: ['entity.name.function.preprocessor', 'meta.preprocessor.macro entity.name.function'],
+  },
+
+  // Ensamblador: variantes de x86_64 (13xforever), NASM y GAS
+  {
+    name: 'ASM registros (variantes)',
+    role: 'register',
+    scope: ['support.type.register', 'keyword.other.register', 'storage.modifier.register'],
+  },
+  {
+    name: 'ASM instrucciones (variantes)',
+    role: 'instruction',
+    scope: [
+      'keyword.control.opcode',
+      'entity.name.opcode',
+
+      'keyword.instruction',
+      'keyword.control.jump',
+      'keyword.control.call',
+    ],
+  },
+  {
+    name: 'ASM directivas (variantes)',
+    role: 'directive',
+    scope: [
+      'support.function.section',
+      'keyword.control.section',
+      'storage.type.data',
+      'keyword.other.data',
+      'support.function.data',
+      'meta.preprocessor.asm',
+      'keyword.control.preprocessor',
+    ],
+  },
+  {
+    name: 'ASM tamaños y punteros',
+    role: 'type',
+    scope: [
+      'storage.type.size',
+      'keyword.operator.size',
+      'support.type.size',
+      'storage.modifier.size',
+      'keyword.other.size',
+    ],
+  },
+  {
+    name: 'ASM etiquetas locales',
+    role: 'label',
+    scope: ['entity.name.function.label.local', 'entity.name.label.local', 'variable.other.label'],
+  },
+
+  // SQL
+  {
+    name: 'SQL funciones',
+    role: 'function',
+    scope: [
+      'support.function.aggregate.sql',
+      'support.function.scalar.sql',
+      'support.function.string.sql',
+      'entity.name.function.sql',
+    ],
+  },
+  {
+    name: 'SQL tablas y esquemas',
+    role: 'type',
+    scope: [
+      'constant.other.database-name.sql',
+      'constant.other.table-name.sql',
+      'entity.name.type.table',
+      'entity.name.type.schema',
+    ],
+  },
+  {
+    name: 'SQL columnas y alias',
+    role: 'property',
+    scope: ['entity.name.column', 'variable.other.column', 'constant.other.column-name.sql'],
+  },
+  { name: 'SQL tipos', role: 'type', scope: ['support.type.sql'] },
+  {
+    name: 'SQL variables',
+    role: 'parameter',
+    scope: ['variable.other.sql', 'text.variable', 'variable.parameter.sql'],
+  },
+
+  // Python, Rust, Java, TS/JS
+  {
+    name: 'Python self/cls',
+    role: 'keyword',
+    fontStyle: 'italic',
+    scope: [
+      'variable.parameter.function.language.special.self',
+      'variable.language.special.self',
+      'variable.parameter.function.language.special.cls',
+    ],
+  },
+  {
+    name: 'Python builtins',
+    role: 'function',
+    scope: ['support.function.builtin.python', 'support.function.magic.python'],
+  },
+  {
+    name: 'Python f-strings',
+    role: 'escape',
+    scope: ['constant.character.format.placeholder.other.python', 'storage.type.format.python'],
+  },
+  {
+    name: 'Rust macros',
+    role: 'macro',
+    scope: ['entity.name.function.macro.rust', 'support.macro.rust'],
+  },
+  {
+    name: 'Rust self',
+    role: 'keyword',
+    fontStyle: 'italic',
+    scope: ['variable.language.self.rust'],
+  },
+  {
+    name: 'Java anotaciones',
+    role: 'macro',
+    scope: ['storage.type.annotation.java', 'punctuation.definition.annotation.java'],
+  },
+  {
+    name: 'this / super',
+    role: 'keyword',
+    fontStyle: 'italic',
+    scope: ['variable.language.this', 'variable.language.super', 'variable.language.self'],
+  },
+  {
+    name: 'JSX/TSX componentes',
+    role: 'type',
+    scope: ['support.class.component', 'entity.name.tag.tsx', 'entity.name.tag.jsx'],
+  },
+
+  // Jupyter / Markdown extra
+  {
+    name: 'Markdown tablas',
+    role: 'operator',
+    scope: ['punctuation.definition.table', 'markup.table punctuation'],
+  },
+  { name: 'Markdown separador', role: 'comment', scope: ['meta.separator.markdown'] },
+  {
+    name: 'Markdown tachado',
+    role: 'comment',
+    fontStyle: 'strikethrough',
+    scope: ['markup.strikethrough'],
+  },
+  {
+    name: 'Markdown imagen',
+    role: 'regex',
+    scope: ['meta.image.inline.markdown', 'string.other.link.description.markdown'],
+  },
+  { name: 'Lenguaje de bloque', role: 'attribute', scope: ['fenced_code.block.language'] },
+
   { name: 'Inválido', role: 'tag', fontStyle: 'underline', scope: ['invalid', 'invalid.illegal'] },
+  { name: 'Obsoleto', role: 'comment', fontStyle: 'strikethrough', scope: ['invalid.deprecated'] },
 ];
 
 export function buildTokenColors(spec: ThemeSpec): TokenColor[] {
@@ -707,6 +1057,17 @@ export function buildSemanticTokenColors(spec: ThemeSpec): VsCodeTheme['semantic
     // TS / JS
     'variable.readonly.defaultLibrary': s.constant,
     'class.defaultLibrary': s.type,
+    'function.defaultLibrary': s.function,
+    'type.defaultLibrary': s.type,
+    '*.deprecated': { foreground: s.comment, strikethrough: true },
+    // C / C++ extra
+    'namespace:cpp': { foreground: s.type, italic: true },
+    'enumMember:cpp': s.constant,
+    'method.static:cpp': { foreground: s.function, italic: true },
+    'function.static:c': { foreground: s.function, italic: true },
+    'parameter.readonly:cpp': { foreground: s.parameter, italic: true },
+    'label:c': s.label,
+    'label:cpp': s.label,
     // SQL (mssql / sqltools)
     'table:sql': s.type,
     'column:sql': s.property,

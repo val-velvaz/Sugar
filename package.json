@@ -67,7 +67,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "npm run test:unit",
-    "test:unit": "tsx --test \"tests/unit/**/*.test.ts\""
+    "test:unit": "tsx --test \"tests/unit/**/*.test.ts\"",
+    "preview:themes": "tsx scripts/preview-themes.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
