@@ -1,0 +1,83 @@
+{
+  "name": "sugar-collage",
+  "displayName": "Sugar Collage",
+  "description": "Un scrapbook dulce y algo surreal para VS Code: temas pastel, íconos, notas, pomodoro y más.",
+  "version": "0.1.0",
+  "publisher": "val-velvaz",
+  "private": true,
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/val-velvaz/Sugar"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "themes": [
+      {
+        "id": "Sugar Collage Dark",
+        "label": "Sugar Collage Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/sugar-collage-dark-color-theme.json"
+      },
+      {
+        "id": "Sugar Collage Light – Algodón",
+        "label": "Sugar Collage Light – Algodón",
+        "uiTheme": "vs",
+        "path": "./themes/sugar-collage-light-algodon-color-theme.json"
+      },
+      {
+        "id": "Sugar Collage Light – Pistache",
+        "label": "Sugar Collage Light – Pistache",
+        "uiTheme": "vs",
+        "path": "./themes/sugar-collage-light-pistache-color-theme.json"
+      },
+      {
+        "id": "Sugar Collage Light – Lavanda",
+        "label": "Sugar Collage Light – Lavanda",
+        "uiTheme": "vs",
+        "path": "./themes/sugar-collage-light-lavanda-color-theme.json"
+      },
+      {
+        "id": "Sugar Collage Light – Crema",
+        "label": "Sugar Collage Light – Crema",
+        "uiTheme": "vs",
+        "path": "./themes/sugar-collage-light-crema-color-theme.json"
+      },
+      {
+        "id": "Sugar Collage Maximal",
+        "label": "Sugar Collage Maximal",
+        "uiTheme": "vs-dark",
+        "path": "./themes/sugar-collage-maximal-color-theme.json"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "npm run generate:themes && npm run check:contrast && node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "generate:themes": "tsx scripts/build-themes.ts",
+    "check:contrast": "tsx scripts/check-contrast.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "npm run test:unit",
+    "test:unit": "tsx --test \"tests/unit/**/*.test.ts\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^20.19.43",
+    "@types/vscode": "^1.90.0",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.13.0",
+    "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.1"
+  }
+}
