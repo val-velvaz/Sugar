@@ -4,6 +4,7 @@ import {
   type FromWebview,
   type Note,
   type NoteColor,
+  type PomodoroView,
   type ScrapbookBackground,
   type ScrapbookState,
   type Task,
@@ -11,7 +12,7 @@ import {
   type ToWebview,
 } from './protocol';
 
-type Section = 'notas' | 'libreta' | 'pendientes';
+type Section = 'notas' | 'libreta' | 'galletitas' | 'pendientes';
 interface UiState {
   open: Record<Section, boolean>;
 }
@@ -24,7 +25,16 @@ declare function acquireVsCodeApi(): {
 
 const vscode = acquireVsCodeApi();
 const send = (msg: FromWebview) => vscode.postMessage(msg);
-const ui: UiState = vscode.getState() ?? { open: { notas: true, libreta: true, pendientes: true } };
+// Se mezcla con los valores por defecto: un estado guardado por una versión anterior puede no tener todas las secciones.
+const ui: UiState = {
+  open: {
+    notas: true,
+    libreta: true,
+    galletitas: true,
+    pendientes: true,
+    ...(vscode.getState()?.open ?? {}),
+  },
+};
 
 let state: ScrapbookState | undefined;
 let todos: TodoItem[] = [];
@@ -325,6 +335,118 @@ function todosSection(s: ScrapbookState): HTMLElement {
   );
 }
 
+// ── Galletitas (Pomodoro) ────────────────────────────────────────────────────
+
+const PHASE_LABEL: Record<PomodoroView['phase'], string> = {
+  trabajo: 'Horneando',
+  descanso: 'Descanso corto',
+  descansoLargo: 'Descanso largo',
+};
+const DAY_NAMES: Record<string, string> = {
+  L: 'lunes',
+  M: 'martes',
+  X: 'miércoles',
+  J: 'jueves',
+  V: 'viernes',
+  S: 'sábado',
+  D: 'domingo',
+};
+
+function clock(ms: number): string {
+  const total = Math.ceil(ms / 1000);
+  return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+}
+
+function pomodoroLeft(p: PomodoroView): number {
+  return p.status === 'running' && p.endsAt !== undefined
+    ? Math.max(0, p.endsAt - Date.now())
+    : p.remainingMs;
+}
+
+function cookiesSection(p: PomodoroView): HTMLElement {
+  const max = Math.max(3, ...p.week.map((d) => d.count));
+  const total = p.week.reduce((a, d) => a + d.count, 0);
+  const today = p.week.find((d) => d.today)?.count ?? 0;
+
+  const timer = h(
+    'div',
+    { class: `pomo pomo-${p.phase}` },
+    h('span', {
+      class: 'pomo-icon',
+      'aria-hidden': 'true',
+      text: p.phase === 'trabajo' ? '🍪' : p.phase === 'descanso' ? '🥛' : '🧁',
+    }),
+    h(
+      'span',
+      { class: 'pomo-info' },
+      h('span', {
+        class: 'pomo-phase',
+        text: `${PHASE_LABEL[p.phase]}${p.status === 'paused' ? ' · en pausa' : ''}`,
+      }),
+      h('code', { class: 'pomo-clock', text: clock(pomodoroLeft(p)) }),
+    ),
+    h('button', {
+      class: 'chip-btn',
+      text: p.status === 'running' ? 'Pausar' : 'Empezar',
+      onclick: () => send({ type: 'pomodoro/toggle' }),
+    }),
+    h('button', {
+      class: 'icon-btn',
+      title: 'Reiniciar',
+      'aria-label': 'Reiniciar temporizador',
+      text: '↺',
+      onclick: () => send({ type: 'pomodoro/reset' }),
+    }),
+  );
+
+  const bars = h(
+    'div',
+    {
+      class: 'bars',
+      role: 'img',
+      'aria-label': `Galletas de los últimos 7 días: ${p.week.map((d) => `${DAY_NAMES[d.label] ?? d.label} ${d.count}`).join(', ')}`,
+    },
+    ...p.week.map((d, i) => {
+      const bar = h(
+        'div',
+        { class: `bar bar-${i % 6}${d.today ? ' today' : ''}`, title: `${d.key}: ${d.count} 🍪` },
+        h('span', { class: 'bar-count', text: d.count ? String(d.count) : '' }),
+        h('span', { class: 'bar-fill' }),
+        h('span', { class: 'bar-label', text: d.label }),
+      );
+      bar.style.setProperty('--h', `${(d.count / max) * 100}%`);
+      return bar;
+    }),
+  );
+
+  return section(
+    'galletitas',
+    'Galletitas',
+    today,
+    null,
+    h(
+      'div',
+      {},
+      timer,
+      bars,
+      h('p', {
+        class: 'cookie-note',
+        text: total
+          ? `${total} galleta${total === 1 ? '' : 's'} esta semana ✦`
+          : 'Termina una ronda para ganar tu primera galleta.',
+      }),
+    ),
+  );
+}
+
+// El reloj del webview cuenta solo; la extensión manda el estado al empezar, pausar o terminar.
+setInterval(() => {
+  const p = state?.pomodoro;
+  if (p?.status !== 'running') return;
+  const el = document.querySelector('.pomo-clock');
+  if (el) el.textContent = clock(pomodoroLeft(p));
+}, 1000);
+
 // ── Raíz ─────────────────────────────────────────────────────────────────────
 
 const BACKGROUNDS: [ScrapbookBackground, string, string][] = [
@@ -381,6 +503,7 @@ function render(): void {
     header(state),
     notesSection(state),
     notebookSection(state),
+    cookiesSection(state.pomodoro),
     todosSection(state),
   );
 

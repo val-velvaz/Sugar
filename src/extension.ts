@@ -1,5 +1,6 @@
 import type * as vscode from 'vscode';
 import { registerRainbowIndent } from './features/indent';
+import { registerPomodoro } from './features/pomodoro';
 import { registerScrapbook } from './features/scrapbook';
 import { registerThemeSwitcher } from './features/theme';
 import { registerTypography } from './features/typography';
@@ -10,7 +11,7 @@ export function activate(context: vscode.ExtensionContext): void {
   registerThemeSwitcher(context);
   registerWashi(context);
   registerRainbowIndent(context);
-  registerScrapbook(context);
+  registerScrapbook(context, registerPomodoro(context));
 }
 
 export function deactivate(): void {}

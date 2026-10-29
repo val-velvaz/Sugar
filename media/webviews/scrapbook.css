@@ -456,3 +456,116 @@ body[data-sparkle='0'] .todo .tag {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* ── Galletitas (Pomodoro) ──────────────────────────────── */
+.pomo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--sc-durazno) 22%, var(--vscode-sideBar-background));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sc-durazno) 55%, transparent);
+}
+.pomo-descanso,
+.pomo-descansoLargo {
+  background: color-mix(in srgb, var(--sc-cielo) 22%, var(--vscode-sideBar-background));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sc-cielo) 55%, transparent);
+}
+.pomo-icon {
+  font-size: 22px;
+}
+.pomo-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.pomo-phase {
+  font-size: 11px;
+  color: var(--vscode-descriptionForeground);
+}
+.pomo-clock {
+  font-size: 18px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.bars {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: end;
+  gap: 6px;
+  height: 110px;
+  margin: 12px 2px 0;
+}
+.bar {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  text-align: center;
+}
+.bar-count {
+  font-size: 10.5px;
+  font-weight: 800;
+  min-height: 14px;
+}
+.bar-fill {
+  align-self: end;
+  height: max(var(--h), 3px);
+  border-radius: 8px 8px 3px 3px;
+  background: var(--bar);
+  box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.08);
+  transition: height 0.3s ease;
+}
+.bar-label {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--vscode-descriptionForeground);
+}
+.bar.today .bar-label {
+  color: var(--vscode-foreground);
+  font-weight: 800;
+}
+.bar.today .bar-fill {
+  box-shadow:
+    inset 0 -3px 0 rgb(0 0 0 / 0.08),
+    0 0 0 2px var(--vscode-focusBorder);
+}
+.bar-0 {
+  --bar: var(--sc-bubblegum);
+}
+.bar-1 {
+  --bar: var(--sc-durazno);
+}
+.bar-2 {
+  --bar: var(--sc-mantequilla);
+}
+.bar-3 {
+  --bar: var(--sc-pistache);
+}
+.bar-4 {
+  --bar: var(--sc-cielo);
+}
+.bar-5 {
+  --bar: var(--sc-lavanda);
+}
+body[data-sparkle='3'] .bar.today .bar-fill {
+  animation: rise 0.6s ease-out;
+}
+@keyframes rise {
+  from {
+    transform: scaleY(0.2);
+    transform-origin: bottom;
+  }
+  to {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+}
+.cookie-note {
+  margin: 8px 2px 0;
+  font-family: Tinos, var(--sc-font-editorial);
+  font-style: italic;
+  color: var(--vscode-descriptionForeground);
+}

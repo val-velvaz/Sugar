@@ -112,6 +112,26 @@
         "command": "sugarCollage.addNote",
         "title": "Nueva nota adhesiva",
         "category": "Sugar Collage"
+      },
+      {
+        "command": "sugarCollage.pomodoro.start",
+        "title": "Pomodoro: empezar",
+        "category": "Sugar Collage"
+      },
+      {
+        "command": "sugarCollage.pomodoro.pause",
+        "title": "Pomodoro: pausar",
+        "category": "Sugar Collage"
+      },
+      {
+        "command": "sugarCollage.pomodoro.toggle",
+        "title": "Pomodoro: empezar o pausar",
+        "category": "Sugar Collage"
+      },
+      {
+        "command": "sugarCollage.pomodoro.reset",
+        "title": "Pomodoro: reiniciar",
+        "category": "Sugar Collage"
       }
     ],
     "configuration": [
@@ -340,6 +360,49 @@
             ],
             "default": 2,
             "markdownDescription": "Cuánta decoración aparece en los paneles de Sugar Collage (0 = minimalista, 3 = maximalista). No afecta al editor."
+          }
+        }
+      },
+      {
+        "title": "Pomodoro Galletita",
+        "properties": {
+          "sugarCollage.pomodoro.workMinutes": {
+            "type": "number",
+            "default": 25,
+            "minimum": 1,
+            "maximum": 180,
+            "markdownDescription": "Duración de una ronda de trabajo (\"horneado\"), en minutos."
+          },
+          "sugarCollage.pomodoro.shortBreakMinutes": {
+            "type": "number",
+            "default": 5,
+            "minimum": 1,
+            "maximum": 60,
+            "markdownDescription": "Duración del descanso corto, en minutos."
+          },
+          "sugarCollage.pomodoro.longBreakMinutes": {
+            "type": "number",
+            "default": 15,
+            "minimum": 1,
+            "maximum": 120,
+            "markdownDescription": "Duración del descanso largo, en minutos."
+          },
+          "sugarCollage.pomodoro.longBreakEvery": {
+            "type": "number",
+            "default": 4,
+            "minimum": 1,
+            "maximum": 12,
+            "markdownDescription": "Cada cuántas rondas de trabajo toca un descanso largo."
+          },
+          "sugarCollage.pomodoro.autoStartNext": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "Empieza la siguiente fase (descanso o trabajo) automáticamente al terminar la anterior."
+          },
+          "sugarCollage.pomodoro.showInStatusBar": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Muestra la galletita con el tiempo restante en la barra de estado."
           }
         }
       }

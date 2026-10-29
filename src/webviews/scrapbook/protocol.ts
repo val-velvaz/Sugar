@@ -44,12 +44,29 @@ export interface TodoItem {
   end: number;
 }
 
+export interface CookieDayView {
+  key: string;
+  label: string;
+  count: number;
+  today: boolean;
+}
+
+export interface PomodoroView {
+  phase: 'trabajo' | 'descanso' | 'descansoLargo';
+  status: 'idle' | 'running' | 'paused';
+  /** Lo que queda, calculado al enviar; si corre, el webview cuenta hacia `endsAt`. */
+  remainingMs: number;
+  endsAt?: number;
+  week: CookieDayView[];
+}
+
 export interface ScrapbookState {
   notes: Note[];
   tasks: Task[];
   hasWorkspace: boolean;
   background: ScrapbookBackground;
   sparkleLevel: 0 | 1 | 2 | 3;
+  pomodoro: PomodoroView;
 }
 
 export type ToWebview =
@@ -67,6 +84,8 @@ export type FromWebview =
   | { type: 'task/delete'; id: string }
   | { type: 'task/clearDone' }
   | { type: 'todos/refresh' }
+  | { type: 'pomodoro/toggle' }
+  | { type: 'pomodoro/reset' }
   | { type: 'todos/open'; item: TodoItem }
   | { type: 'background/set'; value: ScrapbookBackground };
 
@@ -82,6 +101,8 @@ export function parseFromWebview(raw: unknown): FromWebview | undefined {
     case 'ready':
     case 'task/clearDone':
     case 'todos/refresh':
+    case 'pomodoro/toggle':
+    case 'pomodoro/reset':
       return { type: raw.type };
     case 'note/add':
       return raw.scope === 'workspace' || raw.scope === 'global'

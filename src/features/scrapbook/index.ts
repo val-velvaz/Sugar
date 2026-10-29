@@ -8,6 +8,7 @@ import {
   type TodoItem,
   type ToWebview,
 } from '../../webviews/scrapbook/protocol';
+import type { PomodoroService } from '../pomodoro';
 import { revealTag } from '../washi';
 import { scanWorkspace } from '../washi/todos';
 import { washiTags, type WashiTag } from '../../design/tokens';
@@ -32,12 +33,19 @@ class ScrapbookProvider implements vscode.WebviewViewProvider, vscode.Disposable
   private readonly disposables: vscode.Disposable[] = [];
   private saveTimer: ReturnType<typeof setTimeout> | undefined;
 
-  constructor(private readonly context: vscode.ExtensionContext) {
+  constructor(
+    private readonly context: vscode.ExtensionContext,
+    private readonly pomodoro: PomodoroService,
+  ) {
     this.store = new ScrapbookStore(
       context.globalState,
       vscode.workspace.workspaceFolders?.length ? context.workspaceState : undefined,
     );
     this.disposables.push(
+      // Cambios del temporizador (empezar, pausar, galleta ganada) se reflejan en la sección Galletitas.
+      pomodoro.onDidChange(() => {
+        if (this.view?.visible) this.postState();
+      }),
       vscode.workspace.onDidChangeConfiguration((e) => {
         if (
           e.affectsConfiguration('sugarCollage.scrapbook') ||
@@ -101,6 +109,7 @@ class ScrapbookProvider implements vscode.WebviewViewProvider, vscode.Disposable
       hasWorkspace: this.store.hasWorkspace,
       background: background(),
       sparkleLevel: sparkleLevel(),
+      pomodoro: this.pomodoro.snapshot(),
     };
   }
 
@@ -169,6 +178,12 @@ class ScrapbookProvider implements vscode.WebviewViewProvider, vscode.Disposable
       case 'todos/refresh':
         await this.sendTodos();
         return;
+      case 'pomodoro/toggle':
+        this.pomodoro.toggle();
+        return;
+      case 'pomodoro/reset':
+        this.pomodoro.reset();
+        return;
       case 'todos/open':
         await revealTag({
           uri: vscode.Uri.parse(msg.item.uri),
@@ -190,8 +205,11 @@ class ScrapbookProvider implements vscode.WebviewViewProvider, vscode.Disposable
   }
 }
 
-export function registerScrapbook(context: vscode.ExtensionContext): void {
-  const provider = new ScrapbookProvider(context);
+export function registerScrapbook(
+  context: vscode.ExtensionContext,
+  pomodoro: PomodoroService,
+): void {
+  const provider = new ScrapbookProvider(context, pomodoro);
   context.subscriptions.push(
     provider,
     vscode.window.registerWebviewViewProvider(SCRAPBOOK_VIEW, provider, {

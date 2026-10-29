@@ -14,6 +14,17 @@ const sample: ScrapbookState = {
   hasWorkspace: true,
   background: 'cuadricula',
   sparkleLevel: 2,
+  pomodoro: {
+    phase: 'trabajo',
+    status: 'running',
+    remainingMs: 13 * 60_000 + 42_000,
+    week: ['M', 'X', 'J', 'V', 'S', 'D', 'L'].map((label, i) => ({
+      key: `2026-10-${23 + i}`,
+      label,
+      count: [3, 5, 2, 0, 1, 4, 3][i] ?? 0,
+      today: i === 6,
+    })),
+  },
   notes: [
     {
       id: 'n1',
