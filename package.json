@@ -435,7 +435,7 @@
     }
   },
   "scripts": {
-    "build": "npm run generate:themes && npm run generate:icons && npm run check:contrast && node esbuild.mjs",
+    "build": "npm run generate:themes && npm run generate:icons && npm run generate:readme && npm run check:contrast && node esbuild.mjs",
     "watch": "node esbuild.mjs --watch",
     "generate:themes": "tsx scripts/build-themes.ts",
     "check:contrast": "tsx scripts/check-contrast.ts",
@@ -449,7 +449,8 @@
     "preview:icons": "tsx scripts/preview-icons.ts",
     "preview:decorations": "tsx scripts/preview-decorations.ts",
     "generate:fonts": "tsx scripts/copy-fonts.ts",
-    "preview:scrapbook": "npm run build && tsx scripts/preview-scrapbook.ts"
+    "preview:scrapbook": "npm run build && tsx scripts/preview-scrapbook.ts",
+    "generate:readme": "tsx scripts/build-readme.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

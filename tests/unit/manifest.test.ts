@@ -54,3 +54,12 @@ test('los temas del modo automático existen', () => {
 test('activación perezosa', () => {
   assert.deepEqual(pkg.activationEvents, ['onStartupFinished']);
 });
+
+test('las tablas del README están sincronizadas con package.json', async () => {
+  const { renderReadme } = await import('../../src/design/readme');
+  const readme = readFileSync(join(root, 'README.md'), 'utf8');
+  assert.equal(renderReadme(readme, pkg), readme, 'ejecuta npm run generate:readme');
+  for (const c of pkg.contributes.commands) {
+    if (c.command !== 'sugarCollage.completeTag') assert.ok(readme.includes(c.command), c.command);
+  }
+});
