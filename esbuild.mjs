@@ -3,22 +3,38 @@ import * as esbuild from 'esbuild';
 const watch = process.argv.includes('--watch');
 
 /** @type {esbuild.BuildOptions} */
-const options = {
-  entryPoints: ['src/extension.ts'],
+const common = {
   bundle: true,
-  outfile: 'dist/extension.js',
-  format: 'cjs',
-  platform: 'node',
-  target: 'node20',
-  external: ['vscode'],
   sourcemap: watch,
   minify: !watch,
   logLevel: 'info',
 };
 
+/** @type {esbuild.BuildOptions[]} */
+const builds = [
+  // Extensión (Node, CommonJS)
+  {
+    ...common,
+    entryPoints: ['src/extension.ts'],
+    outfile: 'dist/extension.js',
+    format: 'cjs',
+    platform: 'node',
+    target: 'node20',
+    external: ['vscode'],
+  },
+  // Webviews (navegador, IIFE: un archivo por panel)
+  {
+    ...common,
+    entryPoints: { scrapbook: 'src/webviews/scrapbook/main.ts' },
+    outdir: 'dist/webviews',
+    format: 'iife',
+    platform: 'browser',
+    target: 'chrome114',
+  },
+];
+
 if (watch) {
-  const ctx = await esbuild.context(options);
-  await ctx.watch();
+  for (const options of builds) await (await esbuild.context(options)).watch();
 } else {
-  await esbuild.build(options);
+  await Promise.all(builds.map((options) => esbuild.build(options)));
 }

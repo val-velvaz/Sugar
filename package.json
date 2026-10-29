@@ -102,6 +102,16 @@
         "command": "sugarCollage.completeTag",
         "title": "Marcar pendiente como hecho",
         "category": "Sugar Collage"
+      },
+      {
+        "command": "sugarCollage.openScrapbook",
+        "title": "Abrir Mi Scrapbook",
+        "category": "Sugar Collage"
+      },
+      {
+        "command": "sugarCollage.addNote",
+        "title": "Nueva nota adhesiva",
+        "category": "Sugar Collage"
       }
     ],
     "configuration": [
@@ -295,6 +305,43 @@
             "markdownDescription": "Lenguajes (languageId) en los que no se dibuja la indentación arcoíris."
           }
         }
+      },
+      {
+        "title": "Scrapbook",
+        "properties": {
+          "sugarCollage.scrapbook.background": {
+            "type": "string",
+            "enum": [
+              "cuadricula",
+              "gingham",
+              "liso"
+            ],
+            "enumDescriptions": [
+              "Papel cuadriculado en azul cielo.",
+              "Cuadros gingham rosa pastel.",
+              "Sin estampado: solo el color del tema."
+            ],
+            "default": "cuadricula",
+            "markdownDescription": "Fondo del panel **Mi Scrapbook**. También se cambia con los botones de su encabezado."
+          },
+          "sugarCollage.sparkleLevel": {
+            "type": "number",
+            "enum": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "enumDescriptions": [
+              "Minimalista y profesional: sin destellos, inclinaciones ni estampados.",
+              "Sutil: estampado de fondo y notas levemente inclinadas.",
+              "Dulce (por defecto): además cintas washi y destellos ✦.",
+              "Maximalista total: animaciones y todos los adornos."
+            ],
+            "default": 2,
+            "markdownDescription": "Cuánta decoración aparece en los paneles de Sugar Collage (0 = minimalista, 3 = maximalista). No afecta al editor."
+          }
+        }
       }
     ],
     "menus": {
@@ -304,6 +351,24 @@
           "when": "false"
         }
       ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sugarCollage",
+          "title": "Sugar Collage",
+          "icon": "media/activity/scrapbook.svg"
+        }
+      ]
+    },
+    "views": {
+      "sugarCollage": [
+        {
+          "type": "webview",
+          "id": "sugarCollage.scrapbook",
+          "name": "Mi Scrapbook"
+        }
+      ]
     }
   },
   "scripts": {
@@ -311,7 +376,7 @@
     "watch": "node esbuild.mjs --watch",
     "generate:themes": "tsx scripts/build-themes.ts",
     "check:contrast": "tsx scripts/check-contrast.ts",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.webview.json",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "npm run test:unit",
@@ -319,10 +384,15 @@
     "preview:themes": "tsx scripts/preview-themes.ts",
     "generate:icons": "tsx scripts/build-icons.ts",
     "preview:icons": "tsx scripts/preview-icons.ts",
-    "preview:decorations": "tsx scripts/preview-decorations.ts"
+    "preview:decorations": "tsx scripts/preview-decorations.ts",
+    "generate:fonts": "tsx scripts/copy-fonts.ts",
+    "preview:scrapbook": "npm run build && tsx scripts/preview-scrapbook.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@fontsource/fira-code": "^5.3.0",
+    "@fontsource/nunito-sans": "^5.3.0",
+    "@fontsource/tinos": "^5.3.0",
     "@types/node": "^20.19.43",
     "@types/vscode": "^1.90.0",
     "esbuild": "^0.28.2",

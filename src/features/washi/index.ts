@@ -193,7 +193,10 @@ async function completeTag(uriString: string, line: number): Promise<void> {
   await vscode.workspace.applyEdit(edit);
 }
 
-export async function revealTag(t: Pick<WorkspaceTag, 'uri' | 'match'>): Promise<void> {
+export async function revealTag(t: {
+  uri: vscode.Uri;
+  match: Pick<TagMatch, 'line' | 'tagStart' | 'end'>;
+}): Promise<void> {
   const doc = await vscode.workspace.openTextDocument(t.uri);
   const range = new vscode.Range(t.match.line, t.match.tagStart, t.match.line, t.match.end);
   await vscode.window.showTextDocument(doc, { selection: range, preview: true });

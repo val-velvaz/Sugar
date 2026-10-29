@@ -1,0 +1,458 @@
+/* Mi Scrapbook: notas adhesivas, libreta y pendientes. */
+
+/* ── Fondos ─────────────────────────────────────────────── */
+body[data-bg='cuadricula'] {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--sc-cielo) 22%, transparent) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--sc-cielo) 22%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 16px 16px;
+}
+body[data-bg='gingham'] {
+  background-image:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--sc-bubblegum) 13%, transparent) 50%,
+      transparent 50%
+    ),
+    linear-gradient(color-mix(in srgb, var(--sc-bubblegum) 13%, transparent) 50%, transparent 50%);
+  background-size: 18px 18px;
+}
+body[data-sparkle='0'] {
+  background-image: none;
+}
+
+/* ── Encabezado ─────────────────────────────────────────── */
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 -12px 4px;
+  padding: 10px 12px 6px;
+  background: color-mix(in srgb, var(--vscode-sideBar-background) 88%, transparent);
+  backdrop-filter: blur(2px);
+}
+.top h1 {
+  flex: 1;
+  margin: 0;
+  font-size: 18px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.sparkle {
+  color: var(--sc-bubblegum);
+  display: inline-block;
+}
+body[data-sparkle='0'] .sparkle {
+  display: none;
+}
+body[data-sparkle='3'] .sparkle {
+  animation: twinkle 2.6s ease-in-out infinite;
+}
+.bg-switch {
+  display: flex;
+  gap: 2px;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8) rotate(20deg);
+  }
+}
+
+/* ── Secciones ──────────────────────────────────────────── */
+.section {
+  margin-top: 10px;
+}
+.section > summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  list-style: none;
+  padding: 4px 2px;
+}
+.section > summary::-webkit-details-marker {
+  display: none;
+}
+.section > summary::before {
+  content: '▸';
+  color: var(--vscode-descriptionForeground);
+  transition: transform 0.15s;
+}
+.section[open] > summary::before {
+  transform: rotate(90deg);
+}
+.section-title {
+  font-family: Tinos, var(--sc-font-editorial);
+  font-weight: 700;
+  font-size: 15px;
+}
+.count {
+  min-width: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+  background: var(--vscode-badge-background);
+  color: var(--vscode-badge-foreground);
+}
+.spacer {
+  flex: 1;
+}
+.actions {
+  display: flex;
+  gap: 4px;
+}
+.section-body {
+  padding: 6px 0 2px;
+}
+
+/* ── Notas adhesivas ────────────────────────────────────── */
+.notes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px 12px;
+  padding: 8px 2px;
+}
+.note {
+  --paper: var(--sc-mantequilla);
+  position: relative;
+  padding: 14px 10px 6px;
+  border-radius: 2px 2px 10px 2px;
+  background: var(--paper);
+  color: var(--sc-carbon);
+  transform: rotate(var(--rot, 0deg));
+  box-shadow:
+    0 1px 1px rgb(0 0 0 / 0.08),
+    0 4px 10px rgb(0 0 0 / 0.16);
+  transition: transform 0.15s ease;
+}
+.note:focus-within {
+  transform: rotate(0deg) scale(1.01);
+  z-index: 1;
+}
+.color-mantequilla {
+  --paper: var(--sc-mantequilla);
+}
+.color-bubblegum {
+  --paper: var(--sc-rosa-polvo);
+}
+.color-lavanda {
+  --paper: var(--sc-lavanda);
+}
+.color-pistache {
+  --paper: var(--sc-pistache);
+}
+.color-cielo {
+  --paper: var(--sc-cielo);
+}
+.color-durazno {
+  --paper: var(--sc-durazno);
+}
+.color-menta {
+  --paper: var(--sc-menta);
+}
+.color-algodon {
+  --paper: var(--sc-algodon);
+}
+
+/* Washi tape en la esquina (sparkle ≥ 2) */
+body[data-sparkle='2'] .note:not(.pinned)::after,
+body[data-sparkle='3'] .note:not(.pinned)::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  right: 14px;
+  width: 38px;
+  height: 14px;
+  transform: rotate(8deg);
+  background:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.55) 0 4px, transparent 4px 8px),
+    color-mix(in srgb, var(--sc-bubblegum) 65%, transparent);
+  opacity: 0.85;
+}
+
+.pin {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff 0 18%, var(--sc-niebla-lavanda) 22%);
+  box-shadow: 0 2px 2px rgb(0 0 0 / 0.25);
+}
+.note.pinned .pin {
+  background: radial-gradient(
+    circle at 35% 35%,
+    #fff 0 18%,
+    var(--sc-bubblegum) 22%,
+    var(--sc-deep-frambuesa) 100%
+  );
+  transform: scale(1.15);
+}
+
+.note-text {
+  display: block;
+  width: 100%;
+  min-height: 56px;
+  resize: none;
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+.note-text::placeholder {
+  color: color-mix(in srgb, var(--sc-carbon) 55%, transparent);
+}
+.note-text:focus {
+  outline: none;
+}
+.note footer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  min-height: 24px;
+}
+.note .swatches {
+  display: flex;
+  gap: 3px;
+  flex: 1;
+  flex-wrap: wrap;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.note:hover .swatches,
+.note:focus-within .swatches {
+  opacity: 1;
+}
+.swatch {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sc-carbon) 35%, transparent);
+}
+.swatch[aria-pressed='true'] {
+  box-shadow: inset 0 0 0 2px var(--sc-carbon);
+}
+.scope {
+  font-size: 10px;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+.note .icon-btn {
+  color: var(--sc-carbon);
+}
+.note .icon-btn:hover {
+  background: rgb(0 0 0 / 0.08);
+}
+.note .delete.confirm {
+  color: var(--sc-deep-fresa);
+  font-weight: 800;
+}
+
+/* ── Libreta ────────────────────────────────────────────── */
+.paper {
+  --line: 26px;
+  --paper-bg: #fffdf8;
+  --ink: var(--sc-carbon);
+  position: relative;
+  padding: 8px 10px 10px 40px;
+  border-radius: 4px;
+  color: var(--ink);
+  background:
+    linear-gradient(
+      90deg,
+      transparent 29px,
+      color-mix(in srgb, var(--sc-bubblegum) 80%, transparent) 29px 31px,
+      transparent 31px
+    ),
+    repeating-linear-gradient(
+      transparent 0 calc(var(--line) - 1px),
+      color-mix(in srgb, var(--sc-cielo) 90%, transparent) calc(var(--line) - 1px) var(--line)
+    ),
+    var(--paper-bg);
+  background-position:
+    0 0,
+    0 7px,
+    0 0;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.14);
+  line-height: var(--line);
+}
+/* En temas oscuros el papel se atenúa para no deslumbrar. */
+body.vscode-dark .paper,
+body.vscode-high-contrast .paper {
+  --paper-bg: color-mix(in srgb, #fffdf8 9%, var(--vscode-sideBar-background));
+  --ink: var(--vscode-foreground);
+}
+.paper .empty {
+  line-height: var(--line);
+  margin: 0;
+}
+.task-form {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  height: var(--line);
+}
+.task-input {
+  flex: 1;
+  min-width: 0;
+  height: 22px;
+  border: 0;
+  border-bottom: 1px dashed color-mix(in srgb, var(--ink) 40%, transparent);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+}
+.task-input::placeholder {
+  color: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+.tasks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tasks li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--line);
+}
+.tasks .task-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tasks li.done .task-text {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+.tasks .icon-btn {
+  color: var(--ink);
+  opacity: 0;
+}
+.tasks li:hover .icon-btn,
+.tasks .icon-btn:focus-visible {
+  opacity: 0.7;
+}
+
+/* Casilla con forma de botón de costura (4 agujeritos) */
+.sew-check {
+  position: relative;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--sc-algodon);
+  box-shadow: inset 0 0 0 1.5px var(--sc-deep-frambuesa);
+}
+.sew-check::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: radial-gradient(circle, var(--sc-deep-frambuesa) 0 1.2px, transparent 1.6px) 0 0 / 4px
+    4px;
+  opacity: 0.8;
+}
+.sew-check[aria-checked='true'] {
+  background: var(--sc-bubblegum);
+}
+.sew-check[aria-checked='true']::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  top: 7px;
+  height: 2px;
+  background: var(--sc-carbon);
+  transform: rotate(-35deg);
+}
+
+/* ── Pendientes ─────────────────────────────────────────── */
+.todos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.todo {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 8px;
+  text-align: left;
+  background: color-mix(in srgb, var(--vscode-sideBar-background) 75%, transparent);
+}
+.todo:hover {
+  background: var(--vscode-list-hoverBackground);
+}
+.todo .tag {
+  grid-row: span 2;
+  align-self: start;
+  padding: 0 6px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--sc-carbon);
+  transform: rotate(-2deg);
+}
+body[data-sparkle='0'] .todo .tag {
+  transform: none;
+}
+.tag-0 {
+  background: var(--sc-washi-0);
+}
+.tag-1 {
+  background: var(--sc-washi-1);
+}
+.tag-2 {
+  background: var(--sc-washi-2);
+}
+.tag-3 {
+  background: var(--sc-washi-3);
+}
+.tag-4 {
+  background: var(--sc-washi-4);
+}
+.tag-5 {
+  background: var(--sc-washi-5);
+}
+.todo-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.todo-where {
+  font-size: 10.5px;
+  color: var(--vscode-descriptionForeground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

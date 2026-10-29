@@ -3,6 +3,6 @@
 !README.md
 !CHANGELOG.md
 !LICENSE
-!dist/extension.js
+!dist/**/*.js
 !themes/**
 !media/**
