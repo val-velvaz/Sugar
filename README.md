@@ -36,3 +36,15 @@ Pulsa **F5** en VS Code para abrir el Extension Development Host.
 El mapeo de sintaxis es el mismo en los seis. Los oscuros usan el pastel puro y los claros su versión oscurecida.
 Ensamblador (NASM/x86) distingue registros, instrucciones, directivas y etiquetas. C/C++, SQL, Rust, Python, Java y TS/JS
 tienen colores semánticos, y además hay reglas para Markdown, JSON, YAML, CSS, notebooks y logs.
+
+## Íconos de archivos
+
+`Sugar Collage Icons` (Preferencias › Tema de íconos de archivo) usa SVG originales generados desde `src/design/svg.ts`:
+cuentas de pulsera con letras (C, H, C++, Py, TS, JS, `{}`, `<>`, Y), botones de costura, galletas, sellos de cera,
+un pastel por capas (SQL), una dona (CSS), papel de libreta (Markdown), libreta de espiral (Jupyter), una taza (Java),
+un cupcake (Makefile), cubos de azúcar (Dockerfile), una caja de regalo (package.json), un destello (README) y una polaroid (imágenes).
+Las carpetas son notas adhesivas con chincheta (abiertas y cerradas), con emblemas para `src`, `test`, `docs`, `assets`,
+`.vscode` y `.git`; `node_modules` es una galleta mordida. Hay variantes dark y light.
+
+- `npm run generate:icons` regenera `media/icons/` y `themes/sugar-collage-icon-theme.json`.
+- `npm run preview:icons` genera `.preview/icons.html` con todos los íconos sobre el fondo de cada tema.

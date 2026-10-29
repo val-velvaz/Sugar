@@ -56,10 +56,17 @@
         "uiTheme": "vs-dark",
         "path": "./themes/sugar-collage-maximal-color-theme.json"
       }
+    ],
+    "iconThemes": [
+      {
+        "id": "sugar-collage-icons",
+        "label": "Sugar Collage Icons",
+        "path": "./themes/sugar-collage-icon-theme.json"
+      }
     ]
   },
   "scripts": {
-    "build": "npm run generate:themes && npm run check:contrast && node esbuild.mjs",
+    "build": "npm run generate:themes && npm run generate:icons && npm run check:contrast && node esbuild.mjs",
     "watch": "node esbuild.mjs --watch",
     "generate:themes": "tsx scripts/build-themes.ts",
     "check:contrast": "tsx scripts/check-contrast.ts",
@@ -68,7 +75,9 @@
     "format": "prettier --write .",
     "test": "npm run test:unit",
     "test:unit": "tsx --test \"tests/unit/**/*.test.ts\"",
-    "preview:themes": "tsx scripts/preview-themes.ts"
+    "preview:themes": "tsx scripts/preview-themes.ts",
+    "generate:icons": "tsx scripts/build-icons.ts",
+    "preview:icons": "tsx scripts/preview-icons.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
