@@ -3,7 +3,7 @@
  * Temas, webviews e íconos se generan desde aquí; `tokens.json` es la exportación
  * de este archivo (la genera `npm run generate:themes`).
  */
-import type { Hex } from './color';
+import { mix, type Hex } from './color';
 
 export const pastel = {
   bubblegum: '#FF99C9',
@@ -515,6 +515,44 @@ export const themes: readonly ThemeSpec[] = [
   },
 ];
 
+export const washiTags = ['TODO', 'FIXME', 'NOTE', 'HACK', 'IDEA', '?'] as const;
+export type WashiTag = (typeof washiTags)[number];
+
+/** Cinta washi por etiqueta: `tape` es el fondo pastel y `ink` la versión legible del mismo matiz. */
+export const washi: Record<WashiTag, { name: string; tape: Hex; ink: Hex; icon: string }> = {
+  TODO: { name: 'Pendiente', tape: pastel.mantequilla, ink: deep.miel, icon: 'cinta' },
+  FIXME: { name: 'Por arreglar', tape: pastel.fresaLeche, ink: deep.fresa, icon: 'curita' },
+  NOTE: { name: 'Nota', tape: pastel.cielo, ink: deep.azul, icon: 'nota' },
+  HACK: { name: 'Parche', tape: pastel.durazno, ink: deep.cobre, icon: 'cinta cruzada' },
+  IDEA: { name: 'Idea', tape: pastel.lavanda, ink: deep.uva, icon: 'estrella' },
+  '?': { name: 'Pregunta', tape: pastel.menta, ink: deep.mentaProfunda, icon: 'burbuja' },
+};
+
+/** Opacidad de la cinta sobre el editor, por tipo de tema. */
+export const washiAlpha = { dark: 0.26, light: 0.45 } as const;
+
+/** Texto escrito sobre la cinta: como tinta sobre papel, más contrastado que un comentario normal. */
+export const washiText = { dark: neutral.blancoRosado, light: pastel.carbon } as const;
+
+/** Color de la etiqueta (TODO, FIXME…) sobre la cinta. */
+export function washiWordColor(tag: WashiTag, kind: 'dark' | 'light'): Hex {
+  const w = washi[tag];
+  return kind === 'dark' ? mix(w.tape, '#FFFFFF', 0.45) : mix(w.ink, pastel.carbon, 0.3);
+}
+
+/** Rotación de la indentación arcoíris: pastel (oscuros) y su versión profunda (claros). */
+export const rainbow = {
+  pastel: [
+    pastel.bubblegum,
+    pastel.durazno,
+    pastel.mantequilla,
+    pastel.pistache,
+    pastel.cielo,
+    pastel.lavanda,
+  ],
+  deep: [deep.frambuesa, deep.cobre, deep.miel, deep.pino, deep.azul, deep.uva],
+} as const satisfies Record<string, readonly Hex[]>;
+
 /** Objeto serializable que se exporta a `tokens.json`. */
 export const designTokens = {
   pastel,
@@ -525,5 +563,9 @@ export const designTokens = {
   neutral,
   fonts,
   syntaxRoles,
+  washi,
+  washiAlpha,
+  washiText,
+  rainbow,
   themes,
 } as const;

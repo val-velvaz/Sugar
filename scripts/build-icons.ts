@@ -1,18 +1,20 @@
-/** Genera media/icons/{dark,light}/*.svg, el icon theme y contributes.iconThemes. */
+/** Genera media/icons/{dark,light}/*.svg, media/decorations/*.svg, el icon theme y contributes.iconThemes. */
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
+import { allDecorationIcons, DECORATION_DIR } from '../src/design/decoration-icons';
 import { allIconFiles, buildIconTheme, ICON_DIR } from '../src/design/file-icons';
 
 const root = resolve(__dirname, '..');
 const json = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
 
 rmSync(join(root, ICON_DIR), { recursive: true, force: true });
-const files = allIconFiles();
+rmSync(join(root, DECORATION_DIR), { recursive: true, force: true });
+const files = new Map([...allIconFiles(), ...allDecorationIcons()]);
 for (const [path, content] of files) {
   mkdirSync(dirname(join(root, path)), { recursive: true });
   writeFileSync(join(root, path), content);
 }
-console.log(`✦ ${files.size} SVG en ${ICON_DIR}/`);
+console.log(`✦ ${files.size} SVG en ${ICON_DIR}/ y ${DECORATION_DIR}/`);
 
 const themePath = 'themes/sugar-collage-icon-theme.json';
 writeFileSync(join(root, themePath), json(buildIconTheme()));

@@ -82,6 +82,26 @@
         "command": "sugarCollage.selectTheme",
         "title": "Elegir variante de tema",
         "category": "Sugar Collage"
+      },
+      {
+        "command": "sugarCollage.showTodos",
+        "title": "Mis pendientes",
+        "category": "Sugar Collage"
+      },
+      {
+        "command": "sugarCollage.toggleWashi",
+        "title": "Activar/desactivar cintas washi en comentarios",
+        "category": "Sugar Collage"
+      },
+      {
+        "command": "sugarCollage.toggleIndentRainbow",
+        "title": "Activar/desactivar indentación arcoíris",
+        "category": "Sugar Collage"
+      },
+      {
+        "command": "sugarCollage.completeTag",
+        "title": "Marcar pendiente como hecho",
+        "category": "Sugar Collage"
       }
     ],
     "configuration": [
@@ -164,8 +184,127 @@
             "markdownDescription": "Hora (HH:MM) a partir de la cual se usa el tema oscuro en el modo **hora**."
           }
         }
+      },
+      {
+        "title": "Cintas washi en comentarios",
+        "properties": {
+          "sugarCollage.washi.enabled": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Decora con cinta washi pastel los comentarios que empiezan con `TODO`, `FIXME`, `NOTE`, `HACK`, `IDEA` o `?`, en cualquier lenguaje."
+          },
+          "sugarCollage.washi.tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "TODO",
+                "FIXME",
+                "NOTE",
+                "HACK",
+                "IDEA",
+                "?"
+              ]
+            },
+            "uniqueItems": true,
+            "default": [
+              "TODO",
+              "FIXME",
+              "NOTE",
+              "HACK",
+              "IDEA",
+              "?"
+            ],
+            "markdownDescription": "Etiquetas que se decoran. Quita las que no quieras ver resaltadas."
+          },
+          "sugarCollage.washi.gutterIcons": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Muestra un ícono en el margen (cinta, curita, nota, cinta cruzada, estrella o burbuja) junto a cada etiqueta."
+          }
+        }
+      },
+      {
+        "title": "Mis pendientes",
+        "properties": {
+          "sugarCollage.todos.exclude": {
+            "type": "string",
+            "default": "**/{node_modules,dist,out,build,.git,.venv,venv,__pycache__,target}/**",
+            "markdownDescription": "Patrón glob de carpetas y archivos que **no** se revisan al buscar pendientes en el workspace."
+          },
+          "sugarCollage.todos.maxFiles": {
+            "type": "number",
+            "default": 3000,
+            "minimum": 100,
+            "maximum": 50000,
+            "markdownDescription": "Número máximo de archivos que se revisan al buscar pendientes."
+          }
+        }
+      },
+      {
+        "title": "Indentación arcoíris",
+        "properties": {
+          "sugarCollage.indent.enabled": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Colorea cada nivel de indentación con la paleta pastel en rotación."
+          },
+          "sugarCollage.indent.mode": {
+            "type": "string",
+            "enum": [
+              "guias",
+              "fondo"
+            ],
+            "enumDescriptions": [
+              "Solo una guía vertical fina de color por nivel.",
+              "Rellena el espacio de cada nivel con una banda de color."
+            ],
+            "default": "guias",
+            "markdownDescription": "Cómo se dibuja la indentación: **guias** (líneas finas) o **fondo** (bandas de color)."
+          },
+          "sugarCollage.indent.opacity": {
+            "type": "number",
+            "default": 0.45,
+            "minimum": 0.02,
+            "maximum": 1,
+            "markdownDescription": "Opacidad de las guías o bandas (0.02–1). En modo **fondo** se recomienda 0.1–0.2."
+          },
+          "sugarCollage.indent.intensity": {
+            "type": "string",
+            "enum": [
+              "suave",
+              "media",
+              "viva"
+            ],
+            "enumDescriptions": [
+              "Pastel puro: casi un susurro.",
+              "Un poco más de color.",
+              "Colores intensos del mismo matiz."
+            ],
+            "default": "suave",
+            "markdownDescription": "Intensidad del color de cada nivel."
+          },
+          "sugarCollage.indent.excludeLanguages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [
+              "plaintext"
+            ],
+            "markdownDescription": "Lenguajes (languageId) en los que no se dibuja la indentación arcoíris."
+          }
+        }
       }
-    ]
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "sugarCollage.completeTag",
+          "when": "false"
+        }
+      ]
+    }
   },
   "scripts": {
     "build": "npm run generate:themes && npm run generate:icons && npm run check:contrast && node esbuild.mjs",
@@ -179,7 +318,8 @@
     "test:unit": "tsx --test \"tests/unit/**/*.test.ts\"",
     "preview:themes": "tsx scripts/preview-themes.ts",
     "generate:icons": "tsx scripts/build-icons.ts",
-    "preview:icons": "tsx scripts/preview-icons.ts"
+    "preview:icons": "tsx scripts/preview-icons.ts",
+    "preview:decorations": "tsx scripts/preview-decorations.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

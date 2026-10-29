@@ -1,5 +1,13 @@
-import { contrastRatio, flatten, type Hex } from './color';
-import { syntaxRoles, type ThemeSpec } from './tokens';
+import { contrastRatio, flatten, withAlpha, type Hex } from './color';
+import {
+  syntaxRoles,
+  washi,
+  washiAlpha,
+  washiTags,
+  washiText,
+  washiWordColor,
+  type ThemeSpec,
+} from './tokens';
 
 /** Metas WCAG del proyecto. */
 export const MIN_TEXT = 4.5;
@@ -69,6 +77,13 @@ export function checkTheme(spec: ThemeSpec): ContrastResult[] {
   spec.brackets.forEach((c, i) => add(`ui.corchete${i + 1}`, c, ui.editorBg, MIN_UI));
   for (const i of ANSI_CHECKED) {
     add(`ansi.${ANSI_NAMES[i]}`, spec.ansi[i] as Hex, ui.panelBg, MIN_UI);
+  }
+  // Cintas washi: el texto y la etiqueta en negrita siguen siendo texto de código.
+  for (const tag of washiTags) {
+    const w = washi[tag];
+    const tape = flatten(withAlpha(w.tape, washiAlpha[spec.kind]), ui.editorBg);
+    add(`washi.${tag}.texto`, washiText[spec.kind], tape, MIN_TEXT);
+    add(`washi.${tag}.etiqueta`, washiWordColor(tag, spec.kind), tape, MIN_TEXT);
   }
   return out;
 }
